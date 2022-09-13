@@ -1,0 +1,172 @@
+entity Organization {
+
+	id Int, 
+    name String
+}
+
+entity Department {
+
+	id Int,
+    name String
+
+}
+
+entity Ladder {
+	
+    id Int,
+    name String,
+    levelsOrderedList String
+}
+
+/**
+* The level entity
+*/
+entity Level {
+
+	id Int, 
+	name String,
+	nextLevelId Int
+
+}
+
+entity Step {
+
+	id Int,
+    levelId Int,
+    name String,
+    description String,
+    numReqProofPoints Int,
+    threeSixtyReviewRequired Boolean
+    
+}
+
+
+entity User {
+
+	id Int,
+    emailAddress String,
+    status Boolean
+}
+
+/**
+ * The Employee entity.
+ */
+entity Profile {
+
+	id Int,
+    userId Int,
+    organizationId Int,
+    fullName String,
+	email String,
+	phoneNumber String,
+	hireDate Instant,
+    managerId Int
+    status Boolean
+    isManager Boolean
+    isAdmin Boolean
+
+}
+
+entity ReviewBoard {
+
+	id Int,
+    profileId Int,
+    ladderId Int
+}
+
+entity ProgressTracker {
+	id Int,
+    profileId Int,
+	organizationId Int,
+    startedDate Instant,
+    goalDate ZonedDateTime,
+    achievementDate ZonedDateTime,
+    currentLevelId Int,
+    targetLevelId Int,
+    status Boolean
+}
+
+entity ProofPoint {
+	id Int,
+    organizationId Int,
+    progressTrackerId Int,
+    stepId Int,
+    createdDate Instant,
+    createdBy Int,
+    description String
+}
+
+entity ProofPointApproval {
+	id Int,
+    organizationId Int,
+    proofPointId Int,
+    approverType Enum,
+    createdDate Instant,
+    createdBy Int,
+    comment String
+}
+
+relationship OneToMany {
+	User to Profile
+}
+
+relationship OneToMany {
+	Organization to Profile
+}
+
+relationship ManyToOne {
+	Profile{manager} to Profile
+}
+
+relationship OneToMany {
+	Organization to Department
+}
+
+relationship OneToMany {
+	Department to Ladder
+}
+
+relationship OneToMany {
+	Ladder to Level
+}
+
+relationship OneToMany {
+	Level to Step
+}
+
+relationship OneToMany {
+	Profile to ReviewBoard
+}
+
+relationship OneToMany {
+Ladder to ReviewBoard
+}
+
+relationship OneToMany {
+	Profile to ProgressTracker
+}
+
+relationship OneToMany {
+	Level to ProgressTracker
+}
+
+relationship OneToMany {
+	ProgressTracker to ProofPoint
+}
+
+relationship OneToMany {
+	ProofPoint to ProofPointApproval
+}
+
+// Set pagination options
+paginate Employee with infinite-scroll
+
+
+// Use Data Transfer Objects (DTO)
+// dto * with mapstruct
+
+// Set service options to all except few
+service all with serviceImpl except Employee, Job
+
+// Set an angular suffix
+// angularSuffix * with mySuffix
