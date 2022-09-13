@@ -1,0 +1,132 @@
+entity Organization {
+    name String
+}
+
+entity Department {
+    name String
+}
+
+entity Ladder {
+    name String,
+    levelsOrderedList String
+}
+
+entity Level {
+	name String,
+	nextLevelId Integer
+}
+
+entity Step {
+    name String,
+    description String,
+    numReqProofPoints Integer,
+    threeSixtyReviewRequired Boolean
+}
+
+entity User {
+    emailAddress String,
+    status Boolean
+}
+
+entity Profile {
+    fullName String,
+	email String,
+	phoneNumber String,
+	hireDate Instant,
+    status Boolean
+    isManager Boolean
+    isAdmin Boolean
+}
+
+entity ReviewBoard {
+
+}
+
+entity ProgressTracker {
+
+    startedDate Instant,
+    goalDate ZonedDateTime,
+    achievementDate ZonedDateTime,
+    currentLevelId Integer,
+    targetLevelId Integer,
+    status Boolean
+}
+
+entity ProofPoint {
+
+    createdDate Instant,
+    createdBy Integer,
+    description String
+}
+
+entity ProofPointApproval {
+    approverType Enum,
+    createdDate Instant,
+    createdBy Integer,
+    comment String
+}
+
+relationship OneToMany {
+	User to Profile
+}
+
+relationship OneToMany {
+	Organization to Profile
+}
+
+relationship ManyToOne {
+	Profile{manager} to Profile
+}
+
+relationship OneToMany {
+	Organization to Department
+}
+
+relationship OneToMany {
+	Department to Ladder
+}
+
+relationship OneToMany {
+	Ladder to Level
+}
+
+relationship OneToMany {
+	Level to Step
+}
+
+relationship OneToMany {
+	Profile to ReviewBoard
+}
+
+relationship OneToMany {
+Ladder to ReviewBoard
+}
+
+relationship OneToMany {
+	Profile to ProgressTracker
+}
+
+relationship OneToMany {
+	Level to ProgressTracker
+}
+
+relationship OneToMany {
+	ProgressTracker to ProofPoint
+}
+
+relationship OneToMany {
+	ProofPoint to ProofPointApproval
+}
+
+// Set pagination options
+paginate Employee with infinite-scroll
+
+
+// Use Data Transfer Objects (DTO)
+// dto * with mapstruct
+
+// Set service options to all except few
+service all with serviceImpl except Employee, Job
+
+// Set an angular suffix
+// angularSuffix * with mySuffix
